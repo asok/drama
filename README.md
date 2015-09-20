@@ -49,8 +49,12 @@ RSpec.describe UsersController do
         expect(flash[:notice]).to eq('Success')
       end
 
-      it 'creates user' do
-        expect(User).to have_received(:create).with(email: 'user@example.com', password: 'pass')
+      it 'sets up user' do
+        expect(User).to have_received(:new).with(email: 'user@example.com', password: 'pass')
+      end
+
+      it 'saves the user' do
+        expect(user).to have_received(:save)
       end
 
       it 'sends the mail' do
@@ -71,10 +75,6 @@ RSpec.describe UsersController do
 
       it 'sets up the flash message' do
         expect(flash[:notice]).to eq('Failure')
-      end
-
-      it 'tries to create user' do
-        expect(User).to have_received(:create).with(email: 'user@example.com', password: 'pass')
       end
 
       it 'does not send the mail' do
@@ -159,25 +159,54 @@ Maybe later we will want to schedule some Sidekq job or add the created user to 
 
 The controller should only handle the parameteres coming from a browser and setting up a response. It shouldn't care how to send a mail or schedule a job.
 
-Piling everything onto the model layer is not a solution neither. Once your application begins to grow having big models will be a burden also. Having a lot of responsabilities in one place means it is hard to mantain, comprehend and to test.
+Piling everything onto the model layer is not a solution neither. Once your application begins to grow having big models will be a burden also. Having a lot of responsabilities in one place means it is hard to comprehend, mantain and to test.
 
 ## Installation
+
+
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'drama'
+gem 'drama', github: 'asok/drama'
 ```
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install drama
-
 ## Usage
+
+### Act layer
+
+Create an Act that derives from `Drama::Act` that will be used in your controller's action. The Act has to respond to `call` method.
+
+```ruby
+class CreateUserAct < Drama::Act
+  def call
+    User.create!(user_params)
+  end
+
+  protected
+
+  def user_params
+    controller.params.require(:user).permit(:email, :password)
+  end
+end
+```
+
+You can use `require_params` method to generate `user_params` in the Act.
+
+```ruby
+class CreateUserAct < Drama::Act
+  require_params(:user).permit(:email, :password)
+
+  def call
+    User.create!(user_params)
+  end
+end
+```
+
 
 ### Controller layer
 
@@ -212,40 +241,10 @@ The naming convention is "#{action's name}#{controller's name in singular form}#
 
 ```ruby
 class UsersController < ApplicationController
-  acts_on :create
+  acts_on :create # will designate CreateUserAct to the :create action
 
   def create
     act!
-  end
-end
-```
-
-### Act layer
-
-Create an Act that derives from `Drama::Act` that will be used in your controller's action. The Act has to respond to `call` method.
-
-```ruby
-class CreateUserAct < Drama::Act
-  def call
-    User.create!(user_params)
-  end
-
-  protected
-
-  def user_params
-    controller.params.require(:user).permit(:email, :password)
-  end
-end
-```
-
-You can use `require_params` method to generate `user_params` in the Act.
-
-```ruby
-class CreateUserAct < Drama::Act
-  require_params(:user).permit(:email, :password)
-
-  def call
-    User.create!(user_params)
   end
 end
 ```
@@ -274,7 +273,6 @@ It tests that a correct acts are designated to the correct actions.
   end
 
   RSpec.describe UsersController do
-    it{ should act_on(:create) }
     it{ should act_on(:create).with(FetchingUsersAct) }
   end
 ```
