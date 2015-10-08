@@ -15,7 +15,7 @@ module Drama
         @act = act
 
         act.whitelisting.any? do |listing|
-          listing.required == @required && listing.permitted == @permitted
+          listing.required == @required && listing.permitted.sort == @permitted.sort
         end
       end
 
