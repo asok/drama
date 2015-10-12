@@ -26,7 +26,7 @@ module Drama
       self.whitelisting ||= []
       self.whitelisting.push(whitelisting)
 
-      define_method("#{key}_params")      {       instance_variable_get("@#{key}") }
+      define_method("#{key}_params") {       instance_variable_get("@#{key}")      }
       define_method("#{key}_params="){ |arg| instance_variable_set("@#{key}", arg) }
 
       whitelisting

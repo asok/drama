@@ -15,7 +15,8 @@ module Drama
         @act = act
 
         act.whitelisting.any? do |listing|
-          listing.required == @required && listing.permitted.sort == @permitted.sort
+          listing.required == @required &&
+            listing.permitted.sort(&method(:sort)) == @permitted.sort(&method(:sort))
         end
       end
 
@@ -44,6 +45,18 @@ module Drama
         "expected Act to not require #{@required} and permit #{@permitted} but it does"
       end
       alias_method :failure_message_for_should_not, :failure_message_when_negated
+
+      private
+
+      def sort(a, b)
+        if a.is_a?(Hash)
+          -1
+        elsif b.is_a?(Hash)
+          1
+        else
+          a <=> b
+        end
+      end
     end
   end
 end
