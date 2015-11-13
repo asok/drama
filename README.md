@@ -263,6 +263,34 @@ end
 
 ```
 
+#### act, act! example methods
+
+Similar to the controller you can call `act` and `act!` methods to call the acts. You can create a fake controller via `controller` method like [anonymous controller in rspec-rails](https://www.relishapp.com/rspec/rspec-rails/docs/controller-specs/anonymous-controller):
+
+```ruby
+class Act < Drama::Act
+  def call(email)
+    controller.user.email = email
+  end
+end
+
+describe Act do
+  let(:user){ Struct.new(:email).new }
+
+  controller do
+    def current_user
+      user
+    end
+  end
+
+  it 'sets up email on the user' do
+    act!('foo@example.com')
+    expect(user.email).to eq('foo@example.com')
+  end
+end
+
+```
+
 #### act_on matcher
 
 It tests that a correct acts are designated to the correct actions.
