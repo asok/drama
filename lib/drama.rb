@@ -3,6 +3,7 @@ require "drama/act"
 require "drama/whitelisting"
 require "drama/name_error"
 require "drama/matchers"
+require "drama/rspec"
 
 require "active_support"
 require "active_support/core_ext"
