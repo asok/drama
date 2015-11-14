@@ -253,16 +253,6 @@ end
 
 #### RSpec
 
-To ease unit testing of the controller and the acts there are some matchers.
-In your spec helper do:
-
-```ruby
-RSpec.configure do |config|
-  config.include(Drama::Matchers)
-end
-
-```
-
 #### act, act! example methods
 
 Similar to the controller you can call `act` and `act!` methods to call the acts. You can create a fake controller via `controller` method like [anonymous controller in rspec-rails](https://www.relishapp.com/rspec/rspec-rails/docs/controller-specs/anonymous-controller):
