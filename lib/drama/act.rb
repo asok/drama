@@ -1,6 +1,6 @@
 require 'active_support/core_ext/class/attribute'
 
-require_relative './whitelisting'
+require 'drama/whitelisting'
 
 module Drama
   class Act
