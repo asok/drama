@@ -122,5 +122,19 @@ RSpec.describe Drama do
     it 'calls the method call on the instantiated act' do
       expect(controller.act!(1)).to eq("called with 1")
     end
+
+    context 'the #call method accepts block' do
+      before do
+        CreateUserAct.class_eval do
+          def call(arg)
+            "called with #{arg} and #{yield}"
+          end
+        end
+      end
+
+      it 'passes the block to the #call method' do
+        expect(controller.act!(1){ 2 }).to eq("called with 1 and 2")
+      end
+    end
   end
 end

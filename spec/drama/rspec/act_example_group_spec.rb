@@ -103,6 +103,20 @@ RSpec.describe Drama::RSpec::ActExampleGroup do
       it 'sends `call` message to the instantieted act' do
         expect(example.act!).to be true
       end
+
+      context 'the #call method accepts block' do
+        let(:superclass) do
+          Class.new(Drama::Act) do
+            def call(arg)
+              "called with #{arg} and #{yield}"
+            end
+          end
+        end
+
+        it 'passes the block to the #call method' do
+          expect(example.act!(1){ 2 }).to eq("called with 1 and 2")
+        end
+      end
     end
   end
 end

@@ -32,8 +32,8 @@ module Drama
         let(:controller){ Drama::RSpec::FakeController.new }
         let(:act)       { described_class.new(controller) }
 
-        def act!(*args)
-          act.call(*args)
+        def act!(*args, &blk)
+          act.call(*args, &blk)
         end
       end
     end

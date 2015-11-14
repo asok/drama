@@ -21,8 +21,8 @@ module Drama
     act_class.new(self)
   end
 
-  def act!(*args)
-    act.call(*args)
+  def act!(*args, &blk)
+    act.call(*args, &blk)
   end
 
   class_methods do
