@@ -13,7 +13,7 @@ module Drama
       (self.class.whitelisting || []).each do |listing|
         self.send("#{listing.required}_params=",
                   controller.params.require(listing.required).permit(listing.permitted))
-      end
+      end if controller
     end
 
     def call
