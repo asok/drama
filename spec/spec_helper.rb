@@ -4,5 +4,5 @@ require 'drama'
 require 'action_controller'
 
 RSpec.configure do |config|
-  config.include(Drama::Matchers)
+  config.include(Drama::RSpec::Matchers)
 end

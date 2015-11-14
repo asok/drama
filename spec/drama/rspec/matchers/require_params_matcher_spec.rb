@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Drama::Matchers::RequireParamsMatcher do
+RSpec.describe Drama::RSpec::Matchers::RequireParamsMatcher do
   describe 'usage' do
     subject do
       Class.new(Drama::Act) do

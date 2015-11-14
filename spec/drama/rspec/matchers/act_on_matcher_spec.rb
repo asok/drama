@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Drama::Matchers::ActOnMatcher do
+RSpec.describe Drama::RSpec::Matchers::ActOnMatcher do
   class NewUserAct
   end
 
@@ -19,7 +19,7 @@ RSpec.describe Drama::Matchers::ActOnMatcher do
 
     before do
       RSpec.configure do |config|
-        config.include(Drama::Matchers::ActOn)
+        config.include(Drama::RSpec::Matchers::ActOn)
       end
     end
 
