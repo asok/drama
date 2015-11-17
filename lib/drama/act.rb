@@ -9,11 +9,6 @@ module Drama
 
     def initialize(controller = nil)
       self.controller = controller
-
-      (self.class.whitelisting || []).each do |listing|
-        self.send("#{listing.required}_params=",
-                  controller.params.require(listing.required).permit(listing.permitted))
-      end if controller
     end
 
     def call
@@ -26,8 +21,13 @@ module Drama
       self.whitelisting ||= []
       self.whitelisting.push(whitelisting)
 
-      define_method("#{key}_params") {       instance_variable_get("@#{key}")      }
-      define_method("#{key}_params="){ |arg| instance_variable_set("@#{key}", arg) }
+      define_method("#{key}_params") do
+        if controller
+          controller.params.require(whitelisting.required).permit(whitelisting.permitted)
+        else
+          raise "the controller is not set (the act should be initialized with it)"
+        end
+      end
 
       whitelisting
     end
