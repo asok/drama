@@ -224,7 +224,7 @@ class UsersController < ApplicationController
 end
 ```
 
-Also method `act!` is available which does the same as `act.call`.
+Also method `act!` is available which is a shorthand for `act.call`.
 
 ```ruby
 class UsersController < ApplicationController
@@ -260,7 +260,7 @@ Similar to the controller you can call `act` and `act!` methods to call the acts
 ```ruby
 class Act < Drama::Act
   def call(email)
-    controller.user.email = email
+    controller.current_user.email = email
   end
 end
 
